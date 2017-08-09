@@ -1,9 +1,14 @@
 var express = require('express');
 var router = express.Router();
+var models  = require('../models');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('home/index', { title: '首页'});
+  models.Test.findAll().then(tests=>{
+    console.info(tests);
+    res.render('home/index', { title: '首页', tests: tests});
+  })
+  
 });
 
 
