@@ -3,12 +3,13 @@
 <form class="form-horizontal login_form" id="author_form" style="width:700px;">
   <fieldset>
     <div class="form-group">
-      <label for="username" class="col-lg-2 control-label">授权字符串</label>
-      <div class="col-lg-10">
+      {{!-- <label for="username" class="col-lg-2 control-label">授权字符串</label> --}}
+      <div class="col-lg-12">
         <div class="input-group">
-          <input type="text" class="form-control" readonly required>
+          <input type="text" class="form-control" value="{{user.authorization}}" readonly required>
           <span class="input-group-btn">
-            <button class="btn btn-default" type="button">更改</button>
+            <button class="btn btn-primary" type="button">复制</button>
+            <button class="btn btn-warning" type="button">更改</button>
           </span>
         </div>
       </div>

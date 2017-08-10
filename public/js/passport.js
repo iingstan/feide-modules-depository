@@ -60,51 +60,52 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 6:
+/***/ 5:
 /***/ (function(module, exports) {
 
 /**
- * 注册
+ * 修改密码
  */
 
-$('#reg_form').on('submit', function(){
-  var $username = $('#username')
-  var username = $.trim($username.val())
+$('#passport_form').on('submit', function () {
+  var $opassword = $('#opassword')
+  var opassword = $.trim($opassword.val())
   var $password = $('#password')
   var password = $.trim($password.val())
   var $password2 = $('#password2')
   var password2 = $.trim($password2.val())
 
-  if(password !== password2){
+  if (password !== password2) {
     $('#password2_error').text('重复密码不一致！')
     return false
   }
 
   $.ajax({
-    url: '/member/reg',
+    url: '/member/passport',
     type: 'POST',
     dataType: 'json',
     data: {
-      username: username,
+      opassword: opassword,
       password: password
     }
   })
-  .done(function(json) {   
-    if(json.re){
-      self.location.href = '/'
-    }
-    else{
-      alert(json.message)
-    }
-  })
-  .fail(function(error) {
-    alert(error.message)
-  })
+    .done(function (json) {
+      if (json.re) {
+        alert('修改成功！')
+        self.location.reload()
+      }
+      else {
+        alert(json.message)
+      }
+    })
+    .fail(function (error) {
+      alert(error.message)
+    })
   return false
 })
 

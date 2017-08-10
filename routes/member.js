@@ -5,10 +5,42 @@ let jsonresult = require('../lib/jsonresult')
 let user = require('../lib/user')
 
 function checkLogin(req, res, next) {
-  next()
+  let token = req.cookies['fmd-token']
+  if(token){
+    token = unescape(token)
+    let username = user.checkLoginToken(token)
+    if(username != ''){
+      models.User.findOne({
+        where: {
+          username: username
+        }
+      }).then(function (user) {
+        req.body.user = user
+        next()
+      }).catch(function (error) {
+        next(error)
+      })
+      return
+    }
+  }
+  res.redirect('/member/login')
 }
 
-router.get('/login', checkLogin, function (req, res, next) {
+function simpleCheckLogin(req, res, next) {
+  let token = req.cookies['fmd-token']
+  if(token){
+    token = unescape(token)
+    let username = user.checkLoginToken(token)
+    if(username != ''){
+      req.body.username = username
+      next()
+      return
+    }
+  }
+  res.redirect('/member/login')
+}
+
+router.get('/login', function (req, res, next) {
   res.render('member/login', {
     title: '登录'
   });
@@ -20,9 +52,17 @@ router.get('/reg', function (req, res, next) {
   });
 });
 
-router.get('/author', function (req, res, next) {
+router.get('/author', checkLogin, function (req, res, next) {
   res.render('member/author', {
-    title: '授权管理'
+    title: '授权管理',
+    user: req.body.user
+  });
+});
+
+router.get('/passport', simpleCheckLogin, function (req, res, next) {
+  res.render('member/passport', {
+    title: '修改密码',
+    user: req.body.user
   });
 });
 
@@ -36,6 +76,25 @@ router.post('/reg', function (req, res, next) {
   let back = new jsonresult(true, '', null)
 
   user.reg(newuser).then(function () {
+    res.json(back);
+  }).catch(function (error) {
+    back.re = false
+    back.message = error.message
+    res.json(back);
+  });
+
+});
+
+router.post('/passport', checkLogin, function (req, res, next) {
+
+  let opassword = req.body.opassword
+  let password = req.body.password
+  let thisuser = req.body.user
+
+
+  let back = new jsonresult(true, '', null)
+
+  user.modyPassport(thisuser, opassword, password).then(function () {
     res.json(back);
   }).catch(function (error) {
     back.re = false
