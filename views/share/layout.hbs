@@ -25,9 +25,10 @@
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="/">模块一览 <span class="sr-only">(current)</span></a></li>
+          <li><a href="/">模块一览 <span class="sr-only">(current)</span></a></li>
           <li><a href="#">我的模块</a></li>
-          {{!-- <li class="dropdown">
+          <li id="nav_author"><a href="/member/author">授权</a></li>
+          {{!-- <li class="dropdown"> class="active"
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="#">Action</a></li>
@@ -46,8 +47,9 @@
           </div>
           <button type="submit" class="btn btn-default">搜索</button>
         </form>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">登录</a></li>
+        <ul class="nav navbar-nav navbar-right" id="nav_right_member">
+          <li><a href="/member/login">登录</a></li>
+          <li><a href="/member/reg">注册</a></li>
         </ul>
       </div>
     </div>
@@ -61,3 +63,5 @@
 </html>
 <script src="/js/jquery.js"></script>
 <script src="/js/bootstrap.js"></script>
+<script src="/js/common.js"></script>
+{{{block "html_bottom"}}}
