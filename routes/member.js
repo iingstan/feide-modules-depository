@@ -66,6 +66,7 @@ router.get('/passport', simpleCheckLogin, function (req, res, next) {
   });
 });
 
+
 router.post('/reg', function (req, res, next) {
   let newuser = {
     username: req.body.username,
@@ -85,6 +86,9 @@ router.post('/reg', function (req, res, next) {
 
 });
 
+/**
+ *  修改密码
+ */
 router.post('/passport', checkLogin, function (req, res, next) {
 
   let opassword = req.body.opassword
@@ -104,6 +108,9 @@ router.post('/passport', checkLogin, function (req, res, next) {
 
 });
 
+/**
+ * 登录
+ */
 router.post('/login', function (req, res, next) {
   let loginuser = {
     username: req.body.username,
@@ -117,6 +124,23 @@ router.post('/login', function (req, res, next) {
     res.cookie('fmd-token', escape(token),{
       maxAge: 30*24*60*60*1000
     })
+    res.json(back);
+  }).catch(function (error) {
+    back.re = false
+    back.message = error.message
+    res.json(back);
+  });
+
+});
+
+/**
+ * 更改授权字符串
+ */
+router.post('/change_author', checkLogin, function (req, res, next) {
+  let thisuser = req.body.user
+  let back = new jsonresult(true, '', null)
+
+  user.changeAuthor(thisuser).then(function () {
     res.json(back);
   }).catch(function (error) {
     back.re = false

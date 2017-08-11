@@ -10,5 +10,16 @@ router.get('/', function(req, res, next) {
   
 });
 
+function aaa(req, res, next) {
+  next()
+}
+
+router.get('/test', function(req, res, next){
+  next()
+}, function(req, res, next) {
+
+    res.send('aaa');
+});
+
 
 module.exports = router;
