@@ -5,6 +5,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const glob = require('glob')
+let init_data = require('./lib/init_data')
 
 let route_list = {}
 glob.sync('./routes/*.js', {}).forEach(v => {
@@ -94,6 +95,9 @@ app.use(function (err, req, res, next) {
     error: {}
   });
 });
+
+console.info(init_data.moduleList())
+
 
 
 let port = 8870
