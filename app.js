@@ -96,7 +96,7 @@ app.use(function (err, req, res, next) {
   });
 });
 
-console.info(init_data.moduleList())
+init_data.moduleList()
 
 
 

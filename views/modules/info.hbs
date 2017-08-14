@@ -1,0 +1,22 @@
+<h1>{{modulename}} 模块信息</h1>
+
+<dl class="infodl">
+  <dt>版本</dt>
+  <dd>
+    <select name="" id="" class="form-control" style="width:120px;">
+      <option value="{{info.baseinfo.version}}">{{info.baseinfo.version}}</option>
+    </select>
+   </dd>
+  <dt>上传人</dt>
+  <dd>{{info.baseinfo.username}}</dd>
+  <dt>简介</dt>
+  <dd>{{info.baseinfo.intro}}</dd> 
+  <dt>关键字</dt>
+  <dd>{{info.packageinfo.keywords}}&nbsp;</dd>
+  <dt>文件列表</dt>
+  <dd>
+    {{#each info.files}}
+      <li><a href="/modules/raw?path={{../modulename}}\\{{../info.baseinfo.version}}\\{{this}}" target="_blank">{{this}}</a></li>
+    {{/each}}
+  </dd>  
+</dl>

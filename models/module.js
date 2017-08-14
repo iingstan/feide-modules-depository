@@ -1,7 +1,8 @@
 module.exports = function (sequelize, DataTypes) {
     var Module = sequelize.define("Module", {
         name: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            primaryKey: true
         },
         version: {
             type: DataTypes.STRING

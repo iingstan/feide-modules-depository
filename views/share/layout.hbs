@@ -25,7 +25,7 @@
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li><a href="/">模块一览 <span class="sr-only">(current)</span></a></li>
+          <li><a href="/modules/">模块一览 <span class="sr-only">(current)</span></a></li>
           <li><a href="#">我的模块</a></li>
           <li class="dropdown" id="nav_author">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">用户管理 <span class="caret"></span></a>
@@ -35,9 +35,9 @@
             </ul>
           </li> 
         </ul>
-        <form class="navbar-form navbar-left" role="search">
+        <form class="navbar-form navbar-left" method="get" action="/modules/" role="search">
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="模块名称">
+            <input type="text" name="name" class="form-control" placeholder="模块名称">
           </div>
           <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> 搜索</button>
         </form>
@@ -57,5 +57,6 @@
 </html>
 <script src="/js/jquery.js"></script>
 <script src="/js/bootstrap.js"></script>
+<script src="/js/handlebars.js"></script>
 <script src="/js/common.js"></script>
 {{{block "html_bottom"}}}

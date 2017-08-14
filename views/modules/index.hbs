@@ -1,0 +1,55 @@
+<h1>模块一览</h1>
+
+{{!-- <ul class="nav nav-pills">
+  <li class="active"><a href="#">所有模块</a></li>
+  <li><a href="#">上传人</a></li>
+</ul> --}}
+
+<div id="searchdiv">
+   <div class="input-group" style="width:350px;">
+    <input type="text" class="form-control" id="search_key">
+    <span class="input-group-btn">
+      <a id="search_btn" class="btn btn-primary" href="/modules/"><span class="glyphicon glyphicon-search" title="搜索"></span></a>
+      <a id="clean_search" class="btn btn-warning" href="/modules/"><span class="glyphicon glyphicon-remove" title="清空搜索"></span></a>
+    </span>
+  </div>
+</div>
+
+<div id="modules_list"></div>
+
+<script id="modulelist_template" type="text/x-handlebars-template">
+
+  <div class="module_list row">
+    \{{#each this}}
+    <div class="col-md-4">
+    <a href="/modules/info/\{{this.name}}" target="_blank"><div class="panel panel-primary" data-module="\{{this.name}}">
+      <div class="panel-heading">
+        <h3 class="panel-title">\{{this.name}}</h3>
+        <div class="panel-rifun">\{{this.username}}@\{{this.version}}</div>
+      </div>
+      <div class="panel-body">
+        \{{this.intro}}&nbsp;
+      </div>
+    </div>
+    </div></a>
+    \{{/each}}
+  </div>
+</script>
+
+{{!-- <script id="module_template" type="text/x-handlebars-template">
+  <div class="module_info">
+    <dl>
+      <dt>最新版本</dt>
+      <dd>\{{baseinfo.version}}</dd>
+      <dt>显示器</dt>
+      <dd>以视觉方式显示信息的装置 ... ...</dd>
+    </dl>
+  </div>
+</script> --}}
+
+{{#extend "html_bottom"}}
+<script>
+  var search_name = "{{name}}"
+</script>
+<script src="/js/modules_list.js"></script>
+{{/extend}}

@@ -40,3 +40,42 @@ legend{
     vertical-align: -2px;
   }
 }
+
+.panel-heading{
+  position: relative;
+  .panel-rifun{
+    position: absolute;
+    right: 8px;
+    top: 8px;
+  }
+}
+
+#modules_list{
+  a{
+    &:hover{
+      text-decoration: none;
+    }
+  }
+  .panel{
+    cursor: pointer;
+    &:hover{
+      transform: translate(-2px,-2px);
+      transition-duration: 0.15s;
+      box-shadow: rgba(0,0,0,0.3) 3px 3px 3px;
+    }
+  }
+  .panel-rifun{
+    color: #C7DCFF
+  }
+}
+
+.infodl{
+  dd{
+    padding-left: 30px;
+    margin-bottom: 5px;
+  }
+}
+
+#searchdiv{
+  margin-bottom: 20px;
+}
