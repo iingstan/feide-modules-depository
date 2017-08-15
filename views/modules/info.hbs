@@ -1,22 +1,39 @@
 <h1>{{modulename}} 模块信息</h1>
 
+<div id="module_info">
+
+</div>
+
+<script id="module_info_template" type="text/x-handlebars-template">
 <dl class="infodl">
   <dt>版本</dt>
   <dd>
-    <select name="" id="" class="form-control" style="width:120px;">
-      <option value="{{info.baseinfo.version}}">{{info.baseinfo.version}}</option>
+    <select name="" id="version_select" class="form-control" style="width:120px;">
+      \{{#each versions}}
+        <option value="\{{this}}">\{{this}}</option>
+      \{{/each}}
+      
     </select>
    </dd>
   <dt>上传人</dt>
-  <dd>{{info.baseinfo.username}}</dd>
+  <dd>\{{baseinfo.username}}</dd>
   <dt>简介</dt>
-  <dd>{{info.baseinfo.intro}}</dd> 
+  <dd>\{{packageinfo.description}}</dd> 
   <dt>关键字</dt>
-  <dd>{{info.packageinfo.keywords}}&nbsp;</dd>
+  <dd>\{{packageinfo.keywords}}&nbsp;</dd>
   <dt>文件列表</dt>
   <dd>
-    {{#each info.files}}
-      <li><a href="/modules/raw?path={{../modulename}}\\{{../info.baseinfo.version}}\\{{this}}" target="_blank">{{this}}</a></li>
-    {{/each}}
+    \{{#each files}}
+      <li><a href="/modules/raw?path={{modulename}}%5C\{{../packageinfo.version}}%5C\{{this}}" target="_blank">\{{this}}</a></li>
+    \{{/each}}
   </dd>  
 </dl>
+</script>
+
+{{#extend "html_bottom"}}
+<script>
+  var modulename = "{{modulename}}"
+  var version = "{{version}}"
+</script>
+<script src="/js/module.js"></script>
+{{/extend}}

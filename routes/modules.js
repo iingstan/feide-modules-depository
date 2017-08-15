@@ -19,12 +19,13 @@ router.get('/', function(req, res, next) {
 
 router.get('/info/:modulename([a-zA-z0-9_-]+)', function(req, res, next) {
   let modulename = req.params.modulename
-  init_data.getModuleData(modulename).then(info=>{
-    res.render('modules/info', { title: modulename + ' 模块信息', modulename: modulename, info:info});
-  }).catch(err=>{
-    res.send('没有找到此模块')
-  })
-  
+  let version = req.query.version
+  // init_data.getModuleData(modulename).then(info=>{
+  //   res.render('modules/info', { title: modulename + ' 模块信息', modulename: modulename, info:info});
+  // }).catch(err=>{
+  //   res.send('没有找到此模块')
+  // })
+  res.render('modules/info', { title: modulename + ' 模块信息', modulename: modulename, version: version});
 });
 
 router.get('/raw', function (req, res, next) {
@@ -33,6 +34,9 @@ router.get('/raw', function (req, res, next) {
   files.readBigFile(filepath).then((content)=>{
     res.setHeader("Content-Type", 'text/plain; charset=utf-8');
     res.send(content);
+  }).catch(error=>{
+    res.setHeader("Content-Type", 'text/plain; charset=utf-8');
+    res.send('no such file');
   });
 });
 

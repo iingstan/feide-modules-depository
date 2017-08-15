@@ -5,6 +5,7 @@ let init_data = require('../lib/init_data')
 
 
 router.get('/modules', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*")
   let search = req.query.search;
   if(search == undefined || search == ""){
     res.send(init_data.data)
@@ -18,11 +19,14 @@ router.get('/modules', function(req, res, next) {
 });
 
 router.get('/module/:modulename([a-zA-z0-9_-]+)', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*")
   let modulename = req.params.modulename
-  init_data.getModuleData(modulename).then(info=>{
+  let version = req.query.version
+  init_data.getModuleData(modulename, version).then(info=>{
     res.send(info)
   }).catch(err=>{
-    res.send(err.message)
+    res.send('error')
+    console.error(err)
   })
 });
 
