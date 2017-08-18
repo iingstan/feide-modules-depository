@@ -10,7 +10,8 @@ function get_module_list() {
     type: 'GET',
     dataType: 'json',
     data: {
-      search: search_name
+      search: search_name,
+      username: username
     }
   })
   .done(function (json) {

@@ -28,6 +28,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
+app.use('/file', express.static(path.join(__dirname, 'module_files')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 

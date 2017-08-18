@@ -1,5 +1,6 @@
 var user = require('../modules/user')
 
+window.loginuser = ''
 
 //nav登录状态
 $.ajax({
@@ -14,6 +15,7 @@ $.ajax({
   if (json.re && json.result != null && json.result != '') {
     $('#nav_author').show();
     $('#nav_right_member').html('<li class="text_li">欢迎,' + json.result + '</li><li><a href="#" id="nav_logout">退出登录</li>');
+    window.loginuser = json.result
   }
 })
 .fail(function(error) {

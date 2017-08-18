@@ -20,5 +20,10 @@ module.exports = {
     rules: [
 
     ]
+  },
+  resolve: {
+    modules: [
+      path.join(__dirname, 'dev', 'modules')
+    ]
   }
 };

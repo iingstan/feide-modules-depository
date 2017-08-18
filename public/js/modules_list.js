@@ -60,18 +60,18 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 6:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
  * module列表
  */
-var modal = __webpack_require__(7)
+var modal = __webpack_require__(8)
 
 
 function get_module_list() {
@@ -80,7 +80,8 @@ function get_module_list() {
     type: 'GET',
     dataType: 'json',
     data: {
-      search: search_name
+      search: search_name,
+      username: username
     }
   })
   .done(function (json) {
@@ -115,7 +116,7 @@ $('#search_btn').click(function(){
 
 /***/ }),
 
-/***/ 7:
+/***/ 8:
 /***/ (function(module, exports) {
 
 /**

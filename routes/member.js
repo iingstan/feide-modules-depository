@@ -46,6 +46,14 @@ router.get('/login', function (req, res, next) {
   });
 });
 
+router.get('/modules', simpleCheckLogin, function (req, res, next) {
+  // res.render('member/modules', {
+  //   title: '我的模块',
+  //   username: req.body.username
+  // });
+  res.redirect(`/modules/?username=${req.body.username}`)
+});
+
 router.get('/reg', function (req, res, next) {
   res.render('member/reg', {
     title: '注册'

@@ -14,8 +14,11 @@ const path = require('path')
 /* GET home page. */
 router.get('/', function(req, res, next) {
   let name = req.query.name;
-  res.render('modules/index', { title: '模块一览', name:name});
+  let username = req.query.username;
+  res.render('modules/index', { title: '模块一览', name:name, username: username});
 });
+
+
 
 router.get('/info/:modulename([a-zA-z0-9_-]+)', function(req, res, next) {
   let modulename = req.params.modulename
@@ -43,14 +46,16 @@ router.get('/raw', function (req, res, next) {
 
 let cpUpload = upload.fields([{ name: 'my_field' }, { name: 'attachments' }])
 router.post('/uptest', cpUpload, function(req, res, next) { //upload.array('attachments')
-  console.info(111)
+  console.info(req.body)
   let module_info = {
     module_name: req.body.module_name,
     module_author: req.body.module_author,
     module_version: req.body.module_version,
-    module_intro: req.body.module_intro
+    module_intro: req.body.module_intro,
+    module_files_path: req.body.module_files_path
   }
   let module_files = req.files.attachments
+  console.info(module_files);
   //console.info(req.files);
   //req.files.attachments.forEach(v=>{
   //  fs.writeFileSync('./module_depository/' + v.originalname, v.buffer)

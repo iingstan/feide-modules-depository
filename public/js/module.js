@@ -65,35 +65,154 @@
 /************************************************************************/
 /******/ ({
 
-/***/ 5:
+/***/ 11:
 /***/ (function(module, exports) {
+
+/**
+ * modal 确认框
+ */
+
+
+function modal_confirm(options) {
+    this.options = $.extend({
+        title: '提示',
+        content: '',
+        onCancel: null,
+        onConfirm: null
+    }, options);
+}
+
+modal_confirm.prototype.show = function () {
+    var html = $('<div class="modal fade"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">' + this.options.title + '</h4></div><div class="modal-body"><p>' + this.options.content + '</p></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">取消</button> <button type="button" class="btn btn-primary">确定</button></div></div></div></div>');
+    $("body").append(html);
+    html.modal('show');
+
+    html.on('click', '.btn-primary', function(){
+        html.modal('hide');
+        if(this.options.onConfirm){
+            this.options.onConfirm();
+        }
+    }.bind(this));
+
+    html.on('hidden.bs.modal', function (e) {
+        html.remove();
+        if(this.options.onCancel){
+            this.options.onCancel();
+        }
+    }.bind(this));
+};
+
+module.exports = function(options){
+    var new_modal_confirm = new modal_confirm(options);
+    new_modal_confirm.show();
+};
+
+/***/ }),
+
+/***/ 5:
+/***/ (function(module, exports, __webpack_require__) {
 
 /**
  * 模块信息
  */
 
-$.ajax({
-  url: '/api/module/' + modulename + '?version='+ version,
-  type: 'GET',
-  dataType: 'json',
-  data: {
-    
-  }
-})
-.done(function(json) {   
-  var html = Handlebars.compile($("#module_info_template").html())(json);
-  $('#module_info').html(html);
-  $('#version_select').val(json.packageinfo.version)
-  $('#version_select').on('change', function(){
-    self.location.href = '/modules/info/tt?version=' + $(this).val()
-    return false
+var modal_confirm = __webpack_require__(11)
+
+function getModuleInfo() {
+  $.ajax({
+    url: '/api/module/' + modulename + '?version='+ version,
+    type: 'GET',
+    dataType: 'json',
+    data: {
+      
+    }
   })
-})
-.fail(function(error) {
-  alert('获取模块信息失败')
-})
+  .done(function(json) {
+    var html = Handlebars.compile($("#module_info_template").html())(json);
+    $('#module_info').html(html);
+    $('#version_select').val(json.packageinfo.version)
+    $('#version_select').on('change', function(){
+      self.location.href = '/modules/info/' + modulename + '?version=' + $(this).val()
+      return false
+    })
+    module_operate_bind(json.baseinfo.username)
+    //readme.md
+    if(json.files.some(function(v){
+      return v.toLowerCase() == 'readme.md'
+    })){
+      $.ajax({
+        url: '/file/' + modulename + '/' + json.packageinfo.version + '/README.md',
+        type: 'GET',
+        dataType: 'html',
+        data: {
+          
+        }
+      })
+      .done(function(content) {   
+        $('#readme').show().html(markdown.toHTML(content))      
+      })
+      .fail(function(error) {
+        
+      })
+      //
+    }
+
+  })
+  .fail(function(error) {
+    alert('获取模块信息失败')
+  })  
+}
+
+getModuleInfo()
 
 
+function module_operate_bind(username) {
+  return false
+  if (loginuser != username) {
+    return false
+  }
+  $('#module_operate').show()
+  $('#delete_version').on('click', function(){
+    modal_confirm({
+      content: '确定删除此版本模块？删除之后无法恢复！',
+      onConfirm: function(){
+        deleteVersion(modulename, version)
+      }
+    })
+    return false;
+  })
+  $('#delete_module').on('click', function(){
+    modal_confirm({
+      content: '确定删除整个模块？删除之后无法恢复！',
+      onConfirm: function(){
+        deleteModule(modulename)
+      }
+    })    
+    return false;
+  })  
+}
+
+function deleteVersion(modulename, version) {
+  $.ajax({
+    url: '/api/delete_version',
+    type: 'POST',
+    dataType: 'json',
+    data: {
+      modulename: modulename,
+      version: version
+    }
+  })
+  .done(function(json) {   
+    
+  })
+  .fail(function(error) {
+    
+  })
+}
+
+function deleteModule(modulename) {
+
+}
 
 /***/ })
 

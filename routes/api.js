@@ -7,14 +7,19 @@ let init_data = require('../lib/init_data')
 router.get('/modules', function(req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*")
   let search = req.query.search;
-  if(search == undefined || search == ""){
-    res.send(init_data.data)
-  }
-  else{
+  let username = req.query.username
+  if(search){
     init_data.moduleListSearch(search).then(result=>{
       res.send(result)
+    })    
+  }
+  else if(username){
+    init_data.moduleListByUsername(username).then(result=>{
+      res.send(result)
     })
-    
+  }
+  else{
+    res.send(init_data.data)
   }
 });
 

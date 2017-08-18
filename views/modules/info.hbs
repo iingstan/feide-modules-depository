@@ -1,8 +1,13 @@
-<h1>{{modulename}} 模块信息</h1>
+<h3>{{modulename}} 模块信息</h3>
 
-<div id="module_info">
+<div id="module_info"></div>
 
+<div id="module_operate" style="display:none;">
+  <a href="#" id="delete_version" class="btn btn-warning">删除此版本模块</a>
+  <a href="#" id="delete_module" class="btn btn-danger">删除整个模块</a>
 </div>
+
+<div id="readme"></div>
 
 <script id="module_info_template" type="text/x-handlebars-template">
 <dl class="infodl">
@@ -24,7 +29,7 @@
   <dt>文件列表</dt>
   <dd>
     \{{#each files}}
-      <li><a href="/modules/raw?path={{modulename}}%5C\{{../packageinfo.version}}%5C\{{this}}" target="_blank">\{{this}}</a></li>
+      <li><a href="/file/{{modulename}}/\{{../packageinfo.version}}/\{{this}}" target="_blank">\{{this}}</a></li>
     \{{/each}}
   </dd>  
 </dl>
@@ -35,5 +40,6 @@
   var modulename = "{{modulename}}"
   var version = "{{version}}"
 </script>
+<script src="/js/markdown.min.js"></script>
 <script src="/js/module.js"></script>
 {{/extend}}
