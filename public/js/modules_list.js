@@ -73,17 +73,23 @@
  */
 
 
-function modal_alert(options) {
+function modal_alert(options, onClose) {
+    var options_obj = {}
     if( typeof options == "string"){
-        options = {
-            content: options,
-        }
+        options_obj.content = options
+        if(onClose != undefined && typeof onClose == 'function'){
+            options_obj.onClose = onClose
+        }        
     }
+    if(typeof options == 'object'){
+        options_obj = options
+    }
+    
     this.options = $.extend({
         title: '提示',
         content: '',
         onClose: null
-    }, options);
+    }, options_obj);
 }
 
 modal_alert.prototype.show = function () {
@@ -103,8 +109,8 @@ modal_alert.prototype.show = function () {
     }.bind(this));
 };
 
-module.exports = function(options){
-    var new_modal_alert = new modal_alert(options);
+module.exports = function(options, onClose){
+    var new_modal_alert = new modal_alert(options, onClose);
     new_modal_alert.show();
 };
 

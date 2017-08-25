@@ -10,6 +10,7 @@ let modules_file = require('../lib/modules_file')
 let init_data = require('../lib/init_data')
 let files = require('../lib/files')
 const path = require('path')
+let middleware = require('../lib/middleware')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -74,6 +75,35 @@ router.post('/uptest', cpUpload, function(req, res, next) { //upload.array('atta
   });
 }); 
 
+//删除模块版本
+router.post('/delete_version', middleware.simpleCheckLogin,function(req, res, next) {
+  let module_info = {
+    module_name: req.body.module_name,
+    module_version: req.body.module_version
+  }
+  modules_file.deleteVersion(req.body.username, module_info).then(result=>{
+    let back = new jsonresult(true, '', result)
+    res.send(back)
+  }).catch(err=>{
+    console.error(err)
+    let back = new jsonresult(false, err.message, null)
+    res.send(back)
+  })
+}); 
 
+//删除模块
+router.post('/delete_module', middleware.simpleCheckLogin,function(req, res, next) {
+  let module_info = {
+    module_name: req.body.module_name
+  }
+  modules_file.deleteModule(req.body.username, module_info).then(result=>{
+    let back = new jsonresult(true, '', result)
+    res.send(back)
+  }).catch(err=>{
+    console.error(err)
+    let back = new jsonresult(false, err.message, null)
+    res.send(back)
+  })
+}); 
 
 module.exports = router;

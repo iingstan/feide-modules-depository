@@ -109,6 +109,57 @@ module.exports = function(options){
 
 /***/ }),
 
+/***/ 12:
+/***/ (function(module, exports) {
+
+/**
+ * modal alert
+ */
+
+
+function modal_alert(options, onClose) {
+    var options_obj = {}
+    if( typeof options == "string"){
+        options_obj.content = options
+        if(onClose != undefined && typeof onClose == 'function'){
+            options_obj.onClose = onClose
+        }        
+    }
+    if(typeof options == 'object'){
+        options_obj = options
+    }
+    
+    this.options = $.extend({
+        title: '提示',
+        content: '',
+        onClose: null
+    }, options_obj);
+}
+
+modal_alert.prototype.show = function () {
+    var html = $('<div class="modal fade"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">' + this.options.title + '</h4></div><div class="modal-body"><p>' + this.options.content + '</p></div><div class="modal-footer"><button type="button" class="btn btn-primary">确定</button></div></div></div></div>');
+    $("body").append(html);
+    html.modal('show');
+
+    html.on('click', '.btn-primary', function(){
+        html.modal('hide');
+    });
+
+    html.on('hidden.bs.modal', function (e) {
+        html.remove();
+        if(this.options.onClose){
+            this.options.onClose();
+        }
+    }.bind(this));
+};
+
+module.exports = function(options, onClose){
+    var new_modal_alert = new modal_alert(options, onClose);
+    new_modal_alert.show();
+};
+
+/***/ }),
+
 /***/ 5:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -117,6 +168,7 @@ module.exports = function(options){
  */
 
 var modal_confirm = __webpack_require__(11)
+var modal_alert = __webpack_require__(12)
 
 function getModuleInfo() {
   $.ajax({
@@ -131,6 +183,7 @@ function getModuleInfo() {
     var html = Handlebars.compile($("#module_info_template").html())(json);
     $('#module_info').html(html);
     $('#version_select').val(json.packageinfo.version)
+    version = json.packageinfo.version
     $('#version_select').on('change', function(){
       self.location.href = '/modules/info/' + modulename + '?version=' + $(this).val()
       return false
@@ -159,7 +212,7 @@ function getModuleInfo() {
 
   })
   .fail(function(error) {
-    alert('获取模块信息失败')
+    modal_alert('获取模块信息失败')
   })  
 }
 
@@ -167,7 +220,6 @@ getModuleInfo()
 
 
 function module_operate_bind(username) {
-  return false
   if (loginuser != username) {
     return false
   }
@@ -194,25 +246,53 @@ function module_operate_bind(username) {
 
 function deleteVersion(modulename, version) {
   $.ajax({
-    url: '/api/delete_version',
+    url: '/modules/delete_version',
     type: 'POST',
     dataType: 'json',
     data: {
-      modulename: modulename,
-      version: version
+      module_name: modulename,
+      module_version: version
     }
   })
   .done(function(json) {   
-    
+    if(json.re){
+      modal_alert('删除成功', function(){
+        self.location.href = '/modules/info/' + modulename
+      })
+    }
+    else{
+      modal_alert(json.message)
+    }
   })
   .fail(function(error) {
-    
+    modal_alert(error.message)
   })
 }
 
 function deleteModule(modulename) {
-
+  $.ajax({
+    url: '/modules/delete_module',
+    type: 'POST',
+    dataType: 'json',
+    data: {
+      module_name: modulename
+    }
+  })
+  .done(function(json) {   
+    if(json.re){
+      modal_alert('删除成功', function(){
+        self.location.href = '/modules/'
+      })
+    }
+    else{
+      modal_alert(json.message)
+    }
+  })
+  .fail(function(error) {
+    modal_alert(error.message)
+  })
 }
+
 
 /***/ })
 

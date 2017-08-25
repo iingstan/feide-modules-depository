@@ -3,42 +3,8 @@ var router = express.Router();
 var models = require('../models');
 let jsonresult = require('../lib/jsonresult')
 let user = require('../lib/user')
+let middleware = require('../lib/middleware')
 
-function checkLogin(req, res, next) {
-  let token = req.cookies['fmd-token']
-  if(token){
-    token = unescape(token)
-    let username = user.checkLoginToken(token)
-    if(username != ''){
-      models.User.findOne({
-        where: {
-          username: username
-        }
-      }).then(function (user) {
-        req.body.user = user
-        next()
-      }).catch(function (error) {
-        next(error)
-      })
-      return
-    }
-  }
-  res.redirect('/member/login')
-}
-
-function simpleCheckLogin(req, res, next) {
-  let token = req.cookies['fmd-token']
-  if(token){
-    token = unescape(token)
-    let username = user.checkLoginToken(token)
-    if(username != ''){
-      req.body.username = username
-      next()
-      return
-    }
-  }
-  res.redirect('/member/login')
-}
 
 router.get('/login', function (req, res, next) {
   res.render('member/login', {
@@ -46,7 +12,7 @@ router.get('/login', function (req, res, next) {
   });
 });
 
-router.get('/modules', simpleCheckLogin, function (req, res, next) {
+router.get('/modules', middleware.simpleCheckLogin, function (req, res, next) {
   // res.render('member/modules', {
   //   title: '我的模块',
   //   username: req.body.username
@@ -60,14 +26,14 @@ router.get('/reg', function (req, res, next) {
   });
 });
 
-router.get('/author', checkLogin, function (req, res, next) {
+router.get('/author', middleware.checkLogin, function (req, res, next) {
   res.render('member/author', {
     title: '授权管理',
     user: req.body.user
   });
 });
 
-router.get('/passport', simpleCheckLogin, function (req, res, next) {
+router.get('/passport', middleware.simpleCheckLogin, function (req, res, next) {
   res.render('member/passport', {
     title: '修改密码',
     user: req.body.user
@@ -97,7 +63,7 @@ router.post('/reg', function (req, res, next) {
 /**
  *  修改密码
  */
-router.post('/passport', checkLogin, function (req, res, next) {
+router.post('/passport', middleware.checkLogin, function (req, res, next) {
 
   let opassword = req.body.opassword
   let password = req.body.password
@@ -144,7 +110,7 @@ router.post('/login', function (req, res, next) {
 /**
  * 更改授权字符串
  */
-router.post('/change_author', checkLogin, function (req, res, next) {
+router.post('/change_author', middleware.checkLogin, function (req, res, next) {
   let thisuser = req.body.user
   let back = new jsonresult(true, '', null)
 

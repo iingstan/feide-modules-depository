@@ -3,6 +3,7 @@
  */
 
 var modal_confirm = require('modal_confirm')
+var modal_alert = require('../modules/modal_alert/modal_alert')
 
 function getModuleInfo() {
   $.ajax({
@@ -17,6 +18,7 @@ function getModuleInfo() {
     var html = Handlebars.compile($("#module_info_template").html())(json);
     $('#module_info').html(html);
     $('#version_select').val(json.packageinfo.version)
+    version = json.packageinfo.version
     $('#version_select').on('change', function(){
       self.location.href = '/modules/info/' + modulename + '?version=' + $(this).val()
       return false
@@ -45,7 +47,7 @@ function getModuleInfo() {
 
   })
   .fail(function(error) {
-    alert('获取模块信息失败')
+    modal_alert('获取模块信息失败')
   })  
 }
 
@@ -53,7 +55,6 @@ getModuleInfo()
 
 
 function module_operate_bind(username) {
-  return false
   if (loginuser != username) {
     return false
   }
@@ -80,22 +81,49 @@ function module_operate_bind(username) {
 
 function deleteVersion(modulename, version) {
   $.ajax({
-    url: '/api/delete_version',
+    url: '/modules/delete_version',
     type: 'POST',
     dataType: 'json',
     data: {
-      modulename: modulename,
-      version: version
+      module_name: modulename,
+      module_version: version
     }
   })
   .done(function(json) {   
-    
+    if(json.re){
+      modal_alert('删除成功', function(){
+        self.location.href = '/modules/info/' + modulename
+      })
+    }
+    else{
+      modal_alert(json.message)
+    }
   })
   .fail(function(error) {
-    
+    modal_alert(error.message)
   })
 }
 
 function deleteModule(modulename) {
-
+  $.ajax({
+    url: '/modules/delete_module',
+    type: 'POST',
+    dataType: 'json',
+    data: {
+      module_name: modulename
+    }
+  })
+  .done(function(json) {   
+    if(json.re){
+      modal_alert('删除成功', function(){
+        self.location.href = '/modules/'
+      })
+    }
+    else{
+      modal_alert(json.message)
+    }
+  })
+  .fail(function(error) {
+    modal_alert(error.message)
+  })
 }
